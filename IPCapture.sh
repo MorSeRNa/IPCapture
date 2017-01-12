@@ -59,7 +59,7 @@ fi
   echo -e $greenColour" Opening TShark on $Interfaz..\n$endColour"
   sleep 2
   gnome-terminal -x bash -c "tshark -i $Interfaz -f udp > UDPCapture.txt"
-  echo -e $redColour" ...Getting UDP packages...$endColour\n"
+  echo -e $redColour" ...Capturing UDP packages...$endColour\n"
   while true
   do
     if [ $(cat UDPCapture.txt | tail -n1 | grep -c UDP) == "1" ]; then
