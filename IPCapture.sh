@@ -48,12 +48,12 @@ else
   echo -e "$blueColour Tshark$endColour$yellowColour: Installed \n\n$endColour"
   sleep 2
 fi
-  echo -e $greenColour" Buscando interfaces de red..\n$endColour"
+  echo -e $greenColour" Looking for network interfaces\n$endColour"
   sleep 1
   for i in $( ls /sys/class/net ); do
    echo -e $yellowColour" "$i$endColour"\n"
   done
-  echo -e -n $greenColour" Selecciona tu interfaz (enp0s25, wlan0 ...):  $endColour"
+  echo -e -n $greenColour" Select your interface (enp0s25, wlan0 ...):  $endColour"
   read Interfaz
   clear
   echo -e $greenColour" Opening TShark on $Interfaz..\n$endColour"
