@@ -103,7 +103,7 @@ fi
       if [ "$ipstranger1" != "$ipstranger" ]; then # his conditional prevents the repetitive ip.
         if [ $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1) == $(hostname -I) ]; then # same conditional
           ipstranger=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1);
-          echo -e "$blueColour STRANGER IP - $endColour"$yellowColour $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1) $endColour - $(geoiplookup $ipstranger | head -n1 | cut -d ":" -f 2) - $(geoiplookup $ipstranger | head -n2 | tail -n1 | cut -d ":" -f 2 | cut -d "," -f 3);dddddddddddddddd
+          echo -e "$blueColour STRANGER IP - $endColour"$yellowColour $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1) $endColour - $(geoiplookup $ipstranger | head -n1 | cut -d ":" -f 2) - $(geoiplookup $ipstranger | head -n2 | tail -n1 | cut -d ":" -f 2 | cut -d "," -f 3);
         else
           ipstranger=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1);
           echo -e "$blueColour STRANGER IP - $endColour"$yellowColour $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1) $endColour - $(geoiplookup $ipstranger | head -n1 | cut -d ":" -f 2) - $(geoiplookup $ipstranger | head -n2 | tail -n1 | cut -d ":" -f 2 | cut -d "," -f 3);
