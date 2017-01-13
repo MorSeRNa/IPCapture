@@ -62,19 +62,22 @@ fi
   echo -e $redColour" ...Capturing UDP packages...$endColour\n"
   while true
   do
-    if [ $(cat UDPCapture.txt | tail -n1 | grep -c UDP) == "1" ]; then
-      if [ $(hostname -I) != $(cat UDPCapture.txt | tail -n1 | cut -d ">" -f 2 | cut -d "U" -f 1 | tr -d '[[:space:]]') ]; then
-        if [ "$ipstranger" != "$(cat UDPCapture.txt | tail -n1 | cut -d ">" -f 2 | cut -d "U" -f 1 | tr -d '[[:space:]]')" ]; then
-          echo -e "$blueColour STRANGER IP - $endColour"$yellowColour $(cat UDPCapture.txt | tail -n1 | cut -d ">" -f 2 | cut -d "U" -f 1 | tr -d '[[:space:]]') $endColour;
-          ipstranger=$(cat UDPCapture.txt | tail -n1 | cut -d ">" -f 2 | cut -d "U" -f 1 | tr -d '[[:space:]]')
-        fi
+      if [ $(cat UDPCapture.txt | tail -n1 | grep -c UDP) == "1" ]; then
+      if [ $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1) == $(hostname -I) ]; then
+        ipstranger1=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1);
       else
-        if [ "$ipstranger1" != "$(cat UDPCapture.txt | tail -n1 | cut -d ">" -f 1 | cut -d "-" -f 1 | sed 's/^ //g' | sed 's/  / /g' | cut -d " " -f 3 | sed  's/[ \t]*$//')" ]; then
-          echo -e "$blueColour STRANGER IP - $endColour"$yellowColour $(cat UDPCapture.txt | tail -n1 | cut -d ">" -f 1 | cut -d "-" -f 1 | sed 's/^ //g' | sed 's/  / /g' | cut -d " " -f 3 | sed  's/[ \t]*$//')$endColour;
-          ipstranger1=$(cat UDPCapture.txt | tail -n1 | cut -d ">" -f 1 | cut -d "-" -f 1 | sed 's/^ //g' | sed 's/  / /g' | cut -d " " -f 3 | sed  's/[ \t]*$//')
+        ipstranger1=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1);
+      fi
+      if [ "$ipstranger1" != "$ipstranger" ]; then
+        if [ $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1) == $(hostname -I) ]; then
+          echo -e "$blueColour STRANGER IP - $endColour"$yellowColour $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1) $endColour;
+          ipstranger=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1);
+        else
+          echo -e "$blueColour STRANGER IP - $endColour"$yellowColour $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1) $endColour;
+          ipstranger=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1);
         fi
       fi
     fi
-  sleep 0.25
+  sleep 1
   done
 fi
