@@ -48,6 +48,38 @@ else
   echo -e "$blueColour Tshark$endColour$yellowColour: Installed \n\n$endColour"
   sleep 2
 fi
+if [ ! -x /usr/bin/geoiplookup ];then
+    echo -e "\n$redColour geoip-bin$endColour$yellowColour: Not installed \n$endColour "
+    echo -e -n "$greenColour'geoip-bin' will be installed on your computer, do you want to continue?$endColour $blueColour(Yes/No):$endColour"
+    read respuestaA
+
+     case $respuestaA in
+
+       Yes | yes | Y | y ) echo " "
+            echo -e "$greenColour Starting the installation...$endColour"
+            echo " "
+            sleep 2
+            sudo apt-get install geoip-bin
+            echo " "
+            echo -e "$blueColour Installation Finished!$endColour"
+            echo " "
+            echo -e "$redColour Press <Enter> to continue$endColour"
+            read
+            ;;
+
+       No | n | no | No ) echo " "
+            echo -e "$redColour Canceled 'geoip-bin' installation...\n\n$endColour"
+            sleep 1
+            echo -e "$redColour Closing IPCapture...$endColour"
+            sleep 3
+            clear
+            exit
+            ;;
+     esac
+else
+  echo -e "$blueColour geoip-bin$endColour$yellowColour: Installed \n\n$endColour"
+  sleep 2
+fi
   echo -e $greenColour" Looking for network interfaces\n$endColour"
   sleep 1
   for i in $( ls /sys/class/net ); do
@@ -70,11 +102,11 @@ fi
       fi
       if [ "$ipstranger1" != "$ipstranger" ]; then # his conditional prevents the repetitive ip.
         if [ $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1) == $(hostname -I) ]; then # same conditional
-          echo -e "$blueColour STRANGER IP - $endColour"$yellowColour $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1) $endColour;
           ipstranger=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1);
+          echo -e "$blueColour STRANGER IP - $endColour"$yellowColour $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1) $endColour - $(geoiplookup $ipstranger | head -n1 | cut -d ":" -f 2) - $(geoiplookup $ipstranger | head -n2 | tail -n1 | cut -d ":" -f 2 | cut -d "," -f 3);dddddddddddddddd
         else
-          echo -e "$blueColour STRANGER IP - $endColour"$yellowColour $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1) $endColour;
           ipstranger=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1);
+          echo -e "$blueColour STRANGER IP - $endColour"$yellowColour $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1) $endColour - $(geoiplookup $ipstranger | head -n1 | cut -d ":" -f 2) - $(geoiplookup $ipstranger | head -n2 | tail -n1 | cut -d ":" -f 2 | cut -d "," -f 3);
         fi
       fi
     fi
