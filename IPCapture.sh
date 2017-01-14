@@ -111,27 +111,50 @@ fi
           ipstranger=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1);
           if [ "$ipstranger" != "" ]; then
             citystranger="- $(curl -s ipinfo.io/$ipstranger | grep city | cut -d ":" -f 2 | sed 's/"//g' | sed 's/,//g')";
+            regionstranger="- $(curl -s ipinfo.io/$ipstranger | grep region | cut -d ":" -f 2 | sed 's/"//g' | sed 's/,//g')";
             postalstranger="- $(curl -s ipinfo.io/$ipstranger | grep postal | cut -d ":" -f 2 | sed 's/"//g' | sed 's/ //g')";
+            orgstranger="- $(curl -s ipinfo.io/$ipstranger | grep org | cut -d ":" -f 2 | sed 's/"//g' | sed 's/,//g')";
             if [ "$citystranger" = "- " ]; then # avoid empty city
               citystranger=""
             fi
             if [ "$postalstranger" == "- " ]; then #  avoid empty postal code
               postalstranger=""
             fi
-            echo -e "Packets -$blueColour IP: $endColour"$yellowColour $ipstranger $endColour - $turquoiseColour$(geoiplookup $ipstranger | head -n1 | cut -d ":" -f 2 | cut -d "," -f 2 | sed 's/ //g') $citystranger $postalstranger $endColour;
+            if [ "$orgstranger" == "- " ]; then #  avoid empty org
+              orgstranger=""
+            fi
+            if [ "$regionstranger" == "- " ]; then #  avoid empty org
+              regionstranger=""
+            fi
+            if [ "$regionstranger" == "$citystranger" ]; then #  avoid empty org
+              regionstranger=""
+            fi
+            echo -e "Packets -$blueColour IP: $endColour"$yellowColour $ipstranger $endColour - $turquoiseColour$(geoiplookup $ipstranger | head -n1 | cut -d ":" -f 2 | cut -d "," -f 2 | sed 's/ //g') $regionstranger $citystranger $postalstranger $orgstranger $endColour;
           fi
         else
           ipstranger=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1);
           if [ "$ipstranger" != "" ]; then
             citystranger="- $(curl -s ipinfo.io/$ipstranger | grep city | cut -d ":" -f 2 | sed 's/"//g' | sed 's/,//g')";
+            regionstranger="- $(curl -s ipinfo.io/$ipstranger | grep region | cut -d ":" -f 2 | sed 's/"//g' | sed 's/,//g')";
+
             postalstranger="- $(curl -s ipinfo.io/$ipstranger | grep postal | cut -d ":" -f 2 | sed 's/"//g' | sed 's/ //g')";
+            orgstranger="- $(curl -s ipinfo.io/$ipstranger | grep org | cut -d ":" -f 2 | sed 's/"//g' | sed 's/,//g')";
             if [ "$citystranger" = "- " ]; then # avoid empty city
               citystranger=""
             fi
             if [ "$postalstranger" == "- " ]; then #  avoid empty postal code
               postalstranger=""
             fi
-            echo -e "Packets -$blueColour IP: $endColour"$yellowColour $ipstranger $endColour - $turquoiseColour$(geoiplookup $ipstranger | head -n1 | cut -d ":" -f 2 | cut -d "," -f 2 | sed 's/ //g') $citystranger $postalstranger $endColour;
+            if [ "$orgstranger" == "- " ]; then #  avoid empty org
+              orgstranger=""
+            fi
+            if [ "$regionstranger" == "- " ]; then #  avoid empty org
+              regionstranger=""
+            fi
+            if [ "$regionstranger" == "$citystranger" ]; then #  avoid empty org
+              regionstranger=""
+            fi
+            echo -e "Packets -$blueColour IP: $endColour"$yellowColour $ipstranger $endColour - $turquoiseColour$(geoiplookup $ipstranger | head -n1 | cut -d ":" -f 2 | cut -d "," -f 2 | sed 's/ //g') $regionstranger $citystranger $postalstranger $orgstranger $endColour;
           fi
         fi
       fi
