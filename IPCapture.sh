@@ -46,7 +46,6 @@ if [ ! -x /usr/bin/tshark ];then
      esac
 else
   echo -e "$blueColour Tshark$endColour$yellowColour: Installed \n\n$endColour"
-  sleep 2
 fi
 if [ ! -x /usr/bin/geoiplookup ];then
     echo -e "\n$redColour geoip-bin$endColour$yellowColour: Not installed \n$endColour "
@@ -93,9 +92,9 @@ fi
   echo -e $purpleColour
   tshark -i $Interfaz -f udp > UDPCapture.txt &
   echo -e $endColour
-  sleep 2
+  sleep 3
   clear
-  echo -e $redColour" ...Capturing UDP packages...$endColour\n"
+  echo -e $turquoiseColour" ...Capturing UDP packages...$endColour\n"
   while true
   do
       if [ $(cat UDPCapture.txt | tail -n1 | grep -c UDP) == "1" ]; then # check that it is a UDP packet
@@ -104,13 +103,34 @@ fi
       else
         ipstranger1=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1); # use this ip
       fi
+
       if [ "$ipstranger1" != "$ipstranger" ]; then # his conditional prevents the repetitive ip.
         if [ $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1) == $(hostname -I) ]; then # same conditional
           ipstranger=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1);
-          echo -e "Packets  -  $blueColour STRANGER IP - $endColour"$yellowColour $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1) $endColour - $turquoiseColour$(geoiplookup $ipstranger | head -n1 | cut -d ":" -f 2) - $(geoiplookup $ipstranger | head -n2 | tail -n1 | cut -d ":" -f 2 | cut -d "," -f 3)$endColour;
+          if [ "$ipstranger" != "" ]; then
+            citystranger="- $(geoiplookup $ipstranger | head -n2 | tail -n1 | cut -d ":" -f 2 | cut -d "," -f 3)";
+            postalstranger="- $(curl -s ipinfo.io/$ipstranger | grep postal | cut -d ":" -f 2 | sed 's/"//g' | sed 's/ //g')";
+            if [ "$citystranger" = "-  N/A" ]; then
+              citystranger=""
+            fi
+            if [ "$postalstranger" == "- " ]; then
+              postalstranger=""
+            fi
+            echo -e "Packets -$blueColour IP: $endColour"$yellowColour $ipstranger $endColour - $turquoiseColour$(geoiplookup $ipstranger | head -n1 | cut -d ":" -f 2 | cut -d "," -f 2 | sed 's/ //g') $citystranger $postalstranger $endColour;
+          fi
         else
           ipstranger=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1);
-          echo -e "Packets  -  $blueColour STRANGER IP - $endColour"$yellowColour $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1) $endColour - $turquoiseColour$(geoiplookup $ipstranger | head -n1 | cut -d ":" -f 2) - $(geoiplookup $ipstranger | head -n2 | tail -n1 | cut -d ":" -f 2 | cut -d "," -f 3)$endColour;
+          if [ "$ipstranger" != "" ]; then
+            citystranger="- $(geoiplookup $ipstranger | head -n2 | tail -n1 | cut -d ":" -f 2 | cut -d "," -f 3)";
+            postalstranger="- $(curl -s ipinfo.io/$ipstranger | grep postal | cut -d ":" -f 2 | sed 's/"//g' | sed 's/ //g')";
+            if [ "$citystranger" = "-  N/A" ]; then
+              citystranger=""
+            fi
+            if [ "$postalstranger" == "- " ]; then
+              postalstranger=""
+            fi
+            echo -e "Packets -$blueColour IP: $endColour"$yellowColour $ipstranger $endColour - $turquoiseColour$(geoiplookup $ipstranger | head -n1 | cut -d ":" -f 2 | cut -d "," -f 2 | sed 's/ //g') $citystranger $postalstranger $endColour;
+          fi
         fi
       fi
     fi
