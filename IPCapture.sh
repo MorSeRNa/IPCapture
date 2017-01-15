@@ -99,15 +99,15 @@ fi
   echo -e $turquoiseColour" ...Capturing IP from UDP packages...$endColour\n"
   while true
   do
-      if [ $(cat UDPCapture.txt | tail -n1 | grep -c UDP) == "1" ]; then # check that it is a UDP packet
-      if [ $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1) == $(hostname -I) ]; then # compare the ip with ours
+      if [ "$(cat UDPCapture.txt | tail -n1 | grep -c UDP)" = "1" ]; then # check that it is a UDP packet
+      if [ "$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1)" = "$(hostname -I | sed 's/ //g')" ]; then # compare the ip with ours
         ipstranger1=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1); # use the other ip
       else
         ipstranger1=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1); # use this ip
       fi
 
       if [ "$ipstranger1" != "$ipstranger" ]; then # his conditional prevents the repetitive ip.
-        if [ $(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1) == $(hostname -I) ]; then # same conditional
+        if [ "$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | head -n1)" = "$(hostname -I | sed 's/ //g')" ]; then # same conditional
           ipstranger=$(cat UDPCapture.txt | tail -n1 | grep -oi "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"|sort | tail -n1);
           if [ "$ipstranger" != "" ]; then
             citystranger="- $(curl -s ipinfo.io/$ipstranger | grep city | cut -d ":" -f 2 | sed 's/"//g' | sed 's/,//g')";
