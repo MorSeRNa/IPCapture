@@ -10,6 +10,20 @@ turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 
 clear
+echo -e $yellowColour" ___ ___    ____            _"$endColour
+sleep 0.25
+echo -e $yellowColour"|_ _|  _ \ / ___|__ _ _ __ | |_ _   _ _ __ ___"$endColour
+sleep 0.25
+echo -e $yellowColour" | || |_) | |   / _  |  _ \| __| | | |  __/ _ \ "$endColour
+sleep 0.25
+echo -e $yellowColour" | ||  __/| |__| (_| | |_) | |_| |_| | | |  __/"$endColour
+sleep 0.25
+echo -e $yellowColour"|___|_|    \____\____|  __/ \__|\____|_|  \___|"$endColour
+sleep 0.25
+echo -e $yellowColour"                     |_|"$endColour
+
+echo -e $yellowColour"\n ----------------------------------------------- \n\n"$endColour
+
 if [ $(id -u) != "0" ]; then
    echo -e "\n$redColour You must be root to run this program $endColour\n"
    exit
